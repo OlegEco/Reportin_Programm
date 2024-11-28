@@ -1,7 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Reportin_Programm;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<EfCoreDbContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("OurDb")));
 
 var app = builder.Build();
 
