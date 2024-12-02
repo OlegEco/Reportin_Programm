@@ -7,9 +7,11 @@ namespace Reportin_Programm.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly EfCoreDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, EfCoreDbContext context)
         {
+            _context = context;
             _logger = logger;
         }
 
