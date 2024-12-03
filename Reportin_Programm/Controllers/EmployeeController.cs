@@ -122,6 +122,33 @@ namespace Reportin_Programm.Controllers
             return View(employee);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> SignUp(Employee employee)
+        {
+            if (ModelState.IsValid)
+            {
+                employee.Id = Guid.NewGuid();
+                _context.Employees.Add(employee);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(SignUp));
+            }
+
+            return View(employee);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SignIn(string login, string password)
+        {
+            var loginEmployee = await _context.Employees.FirstOrDefaultAsync(log => log.Username == login && log.Password == password);
+            if (loginEmployee == null)
+            {
+                ModelState.AddModelError("", "Invalid username or password");
+                return View();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
         private bool EmployeeExists(Guid id)
         {
             return _context.Employees.Any(e => e.Id == id);
