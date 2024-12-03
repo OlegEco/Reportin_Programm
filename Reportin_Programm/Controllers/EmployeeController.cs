@@ -136,6 +136,8 @@ namespace Reportin_Programm.Controllers
             return View(employee);
         }
 
+        public IActionResult SignIn() => View();
+
         [HttpPost]
         public async Task<IActionResult> SignIn(string login, string password)
         {
