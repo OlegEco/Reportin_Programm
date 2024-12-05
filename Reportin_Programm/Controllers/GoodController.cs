@@ -2,58 +2,58 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Reportin_Programm.Models;
+using System.Runtime.InteropServices;
 
 namespace Reportin_Programm.Controllers
 {
-    public class WarehouseController : Controller
+    public class GoodController : Controller
     {
         private readonly EfCoreDbContext _context;
 
-        public WarehouseController(EfCoreDbContext context)
+        public GoodController(EfCoreDbContext context)
         {
             _context = context;
         }
-
-        // GET: WarehouseController
+        // GET: GoodController
         public async Task<IActionResult> Index()
         {
-            var warehouses = await _context.Warehouses.ToListAsync();
+            var goods = await _context.Goods.ToListAsync();
             return View();
         }
 
-        // GET: WarehouseController/Details/5
+        // GET: GoodController/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
                 return NotFound();
 
-            var warehouses = await _context.Warehouses.FirstOrDefaultAsync(n => n.Id == id);
-            if (warehouses == null)
+            var goods = await _context.Goods.FirstOrDefaultAsync(gi => gi.Id == id);
+            if (goods == null)
                 return NotFound();
 
-            return View(warehouses);
+            return View(goods);
         }
 
-        // GET: WarehouseController/Create
+        // GET: GoodController/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: WarehouseController/Create
+        // POST: GoodController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Warehouse warehouse)
+        public async Task<IActionResult> Create(Good good)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    _context.Add(warehouse);
+                    _context.Add(good);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
-                return View(warehouse);
+                return View(good);
             }
             catch
             {
@@ -61,46 +61,46 @@ namespace Reportin_Programm.Controllers
             }
         }
 
-        // GET: WarehouseController/Edit/5
+        // GET: GoodController/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             try
             {
                 if (id == null)
                     return NotFound();
-                var warehouse = await _context.Warehouses.FindAsync(id);
 
-                if (warehouse == null)
+                var good = await _context.Goods.FindAsync(id);
+                if (good == null)
                     return NotFound();
 
-                return View(warehouse);
+                return View(good);
             }
-            catch
+            catch //TODO Need added to Serilog all catch Exception
             {
                 return View();
             }
+
         }
 
-        // POST: WarehouseController/Edit/5
+        // POST: GoodController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, Warehouse warehouse)
+        public async Task<IActionResult> Edit(Guid id, Good good)
         {
-            if (id != warehouse.Id)
+            if (id != good.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(warehouse);
+                    _context.Update(good);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException dbEx)
                 {
-                    if (!WarehouseExist(warehouse.Id))
+                    if (!GoodExist(good.Id))
                         return NotFound();
-
                     else
                         throw new ArgumentException(dbEx.Message);
                 }
@@ -109,34 +109,39 @@ namespace Reportin_Programm.Controllers
         }
 
 
-        // GET: WarehouseController/Delete/5
+        // GET: GoodController/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
                 return NotFound();
 
-            var warehouse = await _context.Warehouses.FirstOrDefaultAsync(wi => wi.Id == id);
-
-            if (warehouse == null)
+            var goods = await _context.Goods.FirstOrDefaultAsync(gi => gi.Id == id);
+            if (goods == null)
                 return NotFound();
 
-            return View(warehouse);
+            return View(goods);
         }
 
-        // POST: WarehouseController/Delete/5
+        // POST: GoodController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id, Good good)
         {
+            if (id != good.Id)
+                return NotFound();
             try
             {
-                var warehouse = await _context.Warehouses.FindAsync(id);
-
-                if (warehouse != null)
+                var goods = await _context.Goods.FindAsync(id);
+                if (goods != null)
                 {
-                    _context.Warehouses.Remove(warehouse);
+                    _context.Remove(goods);
                     await _context.SaveChangesAsync();
                 }
+                else
+                    if (good == null)
+                        return NotFound();
+
+
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -145,8 +150,9 @@ namespace Reportin_Programm.Controllers
             }
         }
 
-        private bool WarehouseExist(Guid id) =>
-             _context.Warehouses.Any(cont => cont.Id == id);
-
+        private bool GoodExist(Guid id)
+        {
+            return _context.Goods.Any(gi => gi.Id == id);
+        }
     }
 }
