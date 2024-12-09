@@ -1,0 +1,35 @@
+﻿@model Reportin_Programm.Models.Customer
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customer Details</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Customer Details</h1>
+        <div class="mb-3">
+            <strong>First Name:</strong> @Model.FirstName
+        </div>
+        <div class="mb-3">
+            <strong>Last Name:</strong> @Model.LastName
+        </div>
+        <div class="mb-3">
+            <strong>Email:</strong> @Model.Email
+        </div>
+        <div class="mb-3">
+            <strong>Phone:</strong> @Model.Phone
+        </div>
+        <div class="mb-3">
+            <strong>Age:</strong> @Model.Age
+        </div>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
