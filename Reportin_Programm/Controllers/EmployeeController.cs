@@ -60,8 +60,8 @@ namespace Reportin_Programm.Controllers
             return View(employee);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Update(Guid? id)
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -77,7 +77,7 @@ namespace Reportin_Programm.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(Guid id, [Bind("Id,Username,Password,Email,Phone")] Employee employee)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Username,Password,Email,Phone")] Employee employee)
         {
             if (id != employee.Id)
             {
