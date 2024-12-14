@@ -14,75 +14,75 @@ namespace Reportin_Programm.Controllers
             _context = context;
         }
 
-        // GET: CustomerController
+        // GET: Customer
         public async Task<IActionResult> Index()
         {
             var customers = await _context.Customers.ToListAsync();
-            return View();
+            return View(customers);
         }
 
-        // GET: CustomerController/Details/5
+        // GET: Customer/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
                 return NotFound();
 
-            var customers = await _context.Customers.FirstOrDefaultAsync(ci => ci.Id == id);
-            if (customers == null)
+            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == id);
+            if (customer == null)
                 return NotFound();
 
-            return View(customers);
+            return View(customer);
         }
 
-        // GET: CustomerController/Create
+        // GET: Customer/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: CustomerController/Create
+        // POST: Customer/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Customer customer)
         {
             try
             {
-                if (ModelState.IsValid)
-                {
-                    _context.Add(customer);
-                    await _context.SaveChangesAsync();
+            if (ModelState.IsValid)
+            {
+                _context.Add(customer);
+                await _context.SaveChangesAsync();
 
-                    return RedirectToAction(nameof(Index));
-                }
-                return View(customer);
+                return RedirectToAction(nameof(Index));
             }
+            return View(customer);
+        }
             catch
             {
                 return View();
             }
         }
 
-        // GET: CustomerController/Edit/5
+        // GET: Customer/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             try
             {
-                if (id == null)
-                    return NotFound();
+            if (id == null)
+                return NotFound();
 
-                var customer = await _context.Customers.FindAsync(id);
-                if (customer == null)
-                    return NotFound();
+            var customer = await _context.Customers.FindAsync(id);
+            if (customer == null)
+                return NotFound();
 
-                return View(customer);
-            }
+            return View(customer);
+        }
             catch
             {
                 return View();
             }
         }
 
-        // POST: CustomerController/Edit/5
+        // POST: Customer/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, Customer customer)
@@ -90,63 +90,60 @@ namespace Reportin_Programm.Controllers
             if (id != customer.Id)
                 return NotFound();
 
-            if (!ModelState.IsValid)
-                return View(customer); //TODO Change other methods to non-compliance 
-
-            try
+            if (ModelState.IsValid)
             {
-                _context.Update(customer);
-                await _context.SaveChangesAsync();
+                try
+                {
+                    _context.Update(customer);
+                    await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CustomerExists(customer.Id))
+                        return NotFound();
+                    else
+                        throw;
+                }
                 return RedirectToAction(nameof(Index));
             }
-            catch (DbUpdateConcurrencyException dbEx)
-            {
-                if (!CustomerExist(customer.Id))
-                    return NotFound();
-                else
-                    throw new ArgumentException(dbEx.Message);
-            }
+            return View(customer);
         }
 
-
-        // GET: CustomerController/Delete/5
+        // GET: Customer/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
                 return NotFound();
 
-            var customers = await _context.Customers.FirstOrDefaultAsync(ci => ci.Id == id);
-            if (customers == null)
+            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == id);
+            if (customer == null)
                 return NotFound();
 
-            return View(customers);
+            return View(customer);
         }
 
-        // POST: CustomerController/Delete/5
-        [HttpPost]
+        // POST: Customer/Delete/5
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(Guid id, Customer customer)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            if (id != customer.Id)
-                return NotFound();
-            try
+            var customer = await _context.Customers.FindAsync(id);
+            if (customer != null)
             {
-                var customers = await _context.Customers.FindAsync(id);
-                if (customers != null)
-                {
-                    _context.Remove(customer);
-                    await _context.SaveChangesAsync();
-                }
+                _context.Customers.Remove(customer);
+                await _context.SaveChangesAsync();
+            }
                 else
                     if (customer == null)
                     return NotFound();
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool CustomerExists(Guid id)
+        {
+            return _context.Customers.Any(c => c.Id == id);
         }
 
         private bool CustomerExist(Guid id) =>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Reportin_Programm.Models;
 using System.Diagnostics;
@@ -42,7 +43,8 @@ namespace Reportin_Programm.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            var employee = new Employee();
+            return View(employee);
         }
 
         [HttpPost]
@@ -58,8 +60,8 @@ namespace Reportin_Programm.Controllers
             return View(employee);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Update(Guid? id)
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -75,7 +77,7 @@ namespace Reportin_Programm.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(Guid id, [Bind("Id,Username,Password,Email,Phone")] Employee employee)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Username,Password,Email,Phone")] Employee employee)
         {
             if (id != employee.Id)
             {
@@ -120,6 +122,26 @@ namespace Reportin_Programm.Controllers
             }
 
             return View(employee);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            try
+            {
+                var emmployee = await _context.Employees.FindAsync(id);
+
+                if (emmployee != null)
+                {
+                    _context.Employees.Remove(emmployee);
+                    await _context.SaveChangesAsync();
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
         }
 
         [HttpPost]
