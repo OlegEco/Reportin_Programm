@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Reportin_Programm.Models;
-using System.Runtime.InteropServices;
 
 namespace Reportin_Programm.Controllers
 {
@@ -22,6 +20,7 @@ namespace Reportin_Programm.Controllers
         }
 
         // GET: GoodController/Details/5
+        [HttpGet]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -37,20 +36,22 @@ namespace Reportin_Programm.Controllers
         // GET: GoodController/Create
         public IActionResult Create()
         {
-            return View();
+            var good = new Good();
+            return View(good);
         }
 
         // POST: GoodController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Good good)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    good.Id = Guid.NewGuid();
                     _context.Add(good);
                     await _context.SaveChangesAsync();
+
                     return RedirectToAction(nameof(Index));
                 }
                 return View(good);
@@ -84,7 +85,6 @@ namespace Reportin_Programm.Controllers
 
         // POST: GoodController/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, Good good)
         {
             if (id != good.Id)
@@ -110,6 +110,7 @@ namespace Reportin_Programm.Controllers
 
 
         // GET: GoodController/Delete/5
+        [HttpGet]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -125,22 +126,17 @@ namespace Reportin_Programm.Controllers
         // POST: GoodController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(Guid id, Good good)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id != good.Id)
-                return NotFound();
             try
             {
-                var goods = await _context.Goods.FindAsync(id);
-                if (goods != null)
+                var good = await _context.Goods.FindAsync(id);
+
+                if (good != null)
                 {
-                    _context.Remove(goods);
+                    _context.Remove(good);
                     await _context.SaveChangesAsync();
                 }
-                else
-                    if (good == null)
-                        return NotFound();
-
 
                 return RedirectToAction(nameof(Index));
             }

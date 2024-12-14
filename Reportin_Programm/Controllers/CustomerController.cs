@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Reportin_Programm.Models;
 
@@ -37,7 +36,8 @@ namespace Reportin_Programm.Controllers
         // GET: Customer/Create
         public IActionResult Create()
         {
-            return View();
+            var customer = new Customer();
+            return View(customer);
         }
 
         // POST: Customer/Create
@@ -47,15 +47,16 @@ namespace Reportin_Programm.Controllers
         {
             try
             {
-            if (ModelState.IsValid)
-            {
-                _context.Add(customer);
-                await _context.SaveChangesAsync();
+                if (ModelState.IsValid)
+                {
+                    customer.Id = Guid.NewGuid();
+                    _context.Add(customer);
+                    await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(customer);
             }
-            return View(customer);
-        }
             catch
             {
                 return View();
@@ -63,19 +64,20 @@ namespace Reportin_Programm.Controllers
         }
 
         // GET: Customer/Edit/5
+        [HttpGet]
         public async Task<IActionResult> Edit(Guid? id)
         {
             try
             {
-            if (id == null)
-                return NotFound();
+                if (id == null)
+                    return NotFound();
 
-            var customer = await _context.Customers.FindAsync(id);
-            if (customer == null)
-                return NotFound();
+                var customer = await _context.Customers.FindAsync(id);
+                if (customer == null)
+                    return NotFound();
 
-            return View(customer);
-        }
+                return View(customer);
+            }
             catch
             {
                 return View();
@@ -96,7 +98,6 @@ namespace Reportin_Programm.Controllers
                 {
                     _context.Update(customer);
                     await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -111,6 +112,7 @@ namespace Reportin_Programm.Controllers
         }
 
         // GET: Customer/Delete/5
+        [HttpGet]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -124,21 +126,26 @@ namespace Reportin_Programm.Controllers
         }
 
         // POST: Customer/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var customer = await _context.Customers.FindAsync(id);
-            if (customer != null)
+            try
             {
-                _context.Customers.Remove(customer);
-                await _context.SaveChangesAsync();
-            }
-                else
-                    if (customer == null)
-                    return NotFound();
+                var customer = await _context.Customers.FindAsync(id);
 
-            return RedirectToAction(nameof(Index));
+                if (customer != null)
+                {
+                    _context.Customers.Remove(customer);
+                    await _context.SaveChangesAsync();
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
         }
 
         private bool CustomerExists(Guid id)

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Reportin_Programm.Models;
 using System.Diagnostics;
@@ -27,20 +25,16 @@ namespace Reportin_Programm.Controllers
         public async Task<IActionResult> Details(Guid? id) // Read GUID: b1f2e742-2fba-4f37-983b-5c85f41c88ea 
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var employee = await _context.Employees.FirstOrDefaultAsync(employee => employee.Id == id);
             if (employee == null)
-            {
                 return NotFound();
-            }
 
             return View(employee);
         }
 
-
+        [HttpGet]
         public IActionResult Create()
         {
             var employee = new Employee();
@@ -50,39 +44,49 @@ namespace Reportin_Programm.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([Bind("Username,Password,Email,Phone")] Employee employee) // Create
         {
-            if (ModelState.IsValid)
+            try
             {
-                employee.Id = Guid.NewGuid();
-                _context.Add(employee);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    employee.Id = Guid.NewGuid();
+                    _context.Add(employee);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(employee);
             }
-            return View(employee);
+            catch
+            {
+                return View();
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                if (id == null)
+                    return NotFound();
 
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee == null)
-            {
-                return NotFound();
+                var employee = await _context.Employees.FindAsync(id);
+                if (employee == null)
+                    return NotFound();
+
+                return View(employee);
             }
-            return View(employee);
+            catch
+            {
+                return View();
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(Guid id, [Bind("Id,Username,Password,Email,Phone")] Employee employee)
         {
             if (id != employee.Id)
-            {
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
@@ -94,13 +98,9 @@ namespace Reportin_Programm.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!EmployeeExists(employee.Id))
-                    {
                         return NotFound();
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -110,16 +110,13 @@ namespace Reportin_Programm.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(Guid? id)
         {
+
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var employee = await _context.Employees.FirstOrDefaultAsync(m => m.Id == id);
             if (employee == null)
-            {
                 return NotFound();
-            }
 
             return View(employee);
         }

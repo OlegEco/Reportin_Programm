@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Reportin_Programm.Models;
 
@@ -22,6 +21,7 @@ namespace Reportin_Programm.Controllers
         }
 
         // GET: SupplierController/Details/5
+        [HttpGet]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -35,20 +35,22 @@ namespace Reportin_Programm.Controllers
         }
 
         // GET: SupplierController/Create
+        [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            var supplier = new Supplier();
+            return View(supplier);
         }
 
         // POST: SupplierController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Create(Supplier supplier)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    supplier.Id = Guid.NewGuid();
                     _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
@@ -61,6 +63,7 @@ namespace Reportin_Programm.Controllers
         }
 
         // GET: SupplierController/Edit/5
+        [HttpGet]
         public async Task<IActionResult> Edit(Guid? id)
         {
             try
@@ -82,7 +85,6 @@ namespace Reportin_Programm.Controllers
 
         // POST: SupplierController/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, Supplier supplier)
         {
             if (id != supplier.Id)
@@ -102,11 +104,13 @@ namespace Reportin_Programm.Controllers
                     else
                         throw new ArgumentException(dbEx.Message);
                 }
+                return RedirectToAction(nameof(Index));
             }
-            return RedirectToAction(nameof(Index));
+            return View(supplier);
         }
 
         // GET: SupplierController/Delete/5
+        [HttpGet]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -121,24 +125,17 @@ namespace Reportin_Programm.Controllers
 
         // POST: SupplierController/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(Guid id, Supplier supplier)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id != supplier.Id)
-                return NotFound();
-
             try
             {
-                var suppliers = await _context.Suppliers.FindAsync(id);
+                var supplier = await _context.Suppliers.FindAsync(id);
+
                 if (supplier != null)
                 {
                     _context.Remove(id);
                     await _context.SaveChangesAsync();
                 }
-                else
-                    if (supplier == null)
-                    return NotFound();
-
                 return RedirectToAction(nameof(Index));
             }
             catch

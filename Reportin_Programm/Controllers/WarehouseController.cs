@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Reportin_Programm.Models;
 
@@ -35,9 +34,11 @@ namespace Reportin_Programm.Controllers
         }
 
         // GET: WarehouseController/Create
+        [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            var warehouse = new Warehouse();
+            return View(warehouse);
         }
 
         // POST: WarehouseController/Create
@@ -49,8 +50,10 @@ namespace Reportin_Programm.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    warehouse.Id = Guid.NewGuid();
                     _context.Add(warehouse);
                     await _context.SaveChangesAsync();
+                    
                     return RedirectToAction(nameof(Index));
                 }
                 return View(warehouse);
@@ -68,8 +71,8 @@ namespace Reportin_Programm.Controllers
             {
                 if (id == null)
                     return NotFound();
-                var warehouse = await _context.Warehouses.FindAsync(id);
 
+                var warehouse = await _context.Warehouses.FindAsync(id);
                 if (warehouse == null)
                     return NotFound();
 
@@ -83,7 +86,6 @@ namespace Reportin_Programm.Controllers
 
         // POST: WarehouseController/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, Warehouse warehouse)
         {
             if (id != warehouse.Id)
@@ -96,13 +98,12 @@ namespace Reportin_Programm.Controllers
                     _context.Update(warehouse);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException dbEx)
+                catch (DbUpdateConcurrencyException)
                 {
                     if (!WarehouseExist(warehouse.Id))
                         return NotFound();
-
                     else
-                        throw new ArgumentException(dbEx.Message);
+                        throw;
                 }
             }
             return RedirectToAction(nameof(Index));
@@ -110,6 +111,7 @@ namespace Reportin_Programm.Controllers
 
 
         // GET: WarehouseController/Delete/5
+        [HttpGet]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -125,7 +127,6 @@ namespace Reportin_Programm.Controllers
 
         // POST: WarehouseController/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
