@@ -7,38 +7,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Edit Customer</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .card {
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
+
+        .card-header {
+            background: linear-gradient(45deg, #4e73df, #224abe);
+            color: white;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+
+        .form-control {
+            padding-left: 40px;
+            border-radius: 20px;
+        }
+
+        .form-label {
+            font-weight: 500;
+        }
+    </style>
 </head>
-<body>
-    <div class="container mt-5">
-        <h1>Edit Customer</h1>
-        <form asp-action="Edit" method="post">
-            <input type="hidden" name="Id" value="@Model.Id" />
-            <div class="mb-3">
-                <label for="FirstName" class="form-label">First Name</label>
-                <input type="text" class="form-control" id="FirstName" name="FirstName" value="@Model.FirstName" required />
+<body class="bg-light">
+    <div class="container py-4">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold">Edit Customer</h6>
             </div>
-            <div class="mb-3">
-                <label for="LastName" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="LastName" name="LastName" value="@Model.LastName" required />
+            <div class="card-body">
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <div class="mb-4 position-relative">
+                        <label for="FirstName" class="form-label">First Name</label>
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" class="form-control" id="FirstName" name="FirstName"
+                               value="@Model.FirstName" required />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4 position-relative">
+                        <label for="LastName" class="form-label">Last Name</label>
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" class="form-control" id="LastName" name="LastName"
+                               value="@Model.LastName" required />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4 position-relative">
+                        <label for="Email" class="form-label">Email</label>
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" class="form-control" id="Email" name="Email"
+                               value="@Model.Email" required />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4 position-relative">
+                        <label for="Phone" class="form-label">Phone</label>
+                        <i class="fas fa-phone input-icon"></i>
+                        <input type="tel" class="form-control" id="Phone" name="Phone"
+                               value="@Model.Phone" required />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4 position-relative">
+                        <label for="Age" class="form-label">Age</label>
+                        <i class="fas fa-birthday-cake input-icon"></i>
+                        <input type="number" class="form-control" id="Age" name="Age"
+                               value="@Model.Age" required />
+                        <span asp-validation-for="Age" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to List
+                        </a>
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-save me-2"></i>Save Changes
+                        </button>
+                    </div>
+                </form>
             </div>
-            <div class="mb-3">
-                <label for="Email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" required />
-            </div>
-            <div class="mb-3">
-                <label for="Phone" class="form-label">Phone</label>
-                <input type="text" class="form-control" id="Phone" name="Phone" value="@Model.Phone" required />
-            </div>
-            <div class="mb-3">
-                <label for="Age" class="form-label">Age</label>
-                <input type="number" class="form-control" id="Age" name="Age" value="@Model.Age" required />
-            </div>
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-        </form>
+        </div>
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 </body>
 </html>

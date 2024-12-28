@@ -1,26 +1,92 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign In</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fc;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
+
+        .card-header {
+            background: linear-gradient(45deg, #4e73df, #224abe);
+            color: white;
+        }
+
+        .btn-login {
+            background: linear-gradient(45deg, #4e73df, #224abe);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+            .btn-login:hover {
+                background: linear-gradient(45deg, #224abe, #4e73df);
+                transform: translateY(-3px);
+            }
+
+        .form-control:focus {
+            border-color: #4e73df;
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">Sign In</h1>
-        <form asp-action="SignIn" method="post" class="w-50 mx-auto">
-            <div class="mb-3">
-                <label for="Username" class="form-label">Username:</label>
-                <input type="text" id="Username" name="login" class="form-control" required />
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-6 col-lg-8 col-md-9">
+                <div class="card o-hidden border-0 shadow-lg my-5 login-container">
+                    <div class="card-header text-center py-3">
+                        <h1 class="h4 text-white m-0">Welcome Back!</h1>
+                    </div>
+                    <div class="card-body p-5">
+                        <form asp-action="SignIn" method="post">
+                            <div class="mb-4">
+                                <label for="Username" class="form-label">
+                                    <i class="fas fa-user text-primary me-2"></i>Username
+                                </label>
+                                <input type="text"
+                                       id="Username"
+                                       name="login"
+                                       class="form-control form-control-lg"
+                                       placeholder="Enter your username"
+                                       required />
+                            </div>
+                            <div class="mb-4">
+                                <label for="Password" class="form-label">
+                                    <i class="fas fa-lock text-primary me-2"></i>Password
+                                </label>
+                                <input type="password"
+                                       id="Password"
+                                       name="password"
+                                       class="form-control form-control-lg"
+                                       placeholder="Enter your password"
+                                       required />
+                            </div>
+                            <button type="submit" class="btn btn-login btn-lg w-100">
+                                <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                            </button>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center py-3">
+                        <a href="/Employee/SignUp" class="text-primary text-decoration-none">
+                            <i class="fas fa-user-plus me-2"></i>Don't have an account? Sign Up
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="Password" class="form-label">Password:</label>
-                <input type="password" id="Password" name="password" class="form-control" required />
-            </div>
-            <button type="submit" class="btn btn-success w-100">Sign In</button>
-        </form>
-        <div class="text-center mt-3">
-            <a href="/Employee/SignUp" class="text-decoration-none">Don't have an account? Sign Up</a>
         </div>
     </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

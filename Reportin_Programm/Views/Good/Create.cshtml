@@ -1,11 +1,11 @@
-﻿@model Reportin_Programm.Models.Customer
+﻿@model Reportin_Programm.Models.Good
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Create Customer</title>
+    <title>Create Good</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -40,45 +40,50 @@
     <div class="container py-4">
         <div class="card shadow">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold">Create New Customer</h6>
+                <h6 class="m-0 font-weight-bold">Create New Good</h6>
             </div>
             <div class="card-body">
                 <form asp-action="Create" method="post">
-                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
                     <div class="mb-4 position-relative">
-                        <label for="FirstName" class="form-label">First Name</label>
-                        <i class="fas fa-user input-icon"></i>
-                        <input type="text" class="form-control" id="FirstName" name="FirstName" value="@Model?.FirstName" required />
-                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                        <label for="Name" class="form-label">Name</label>
+                        <i class="fas fa-tag input-icon"></i>
+                        <input type="text" class="form-control" id="Name" name="Name"
+                               value="@Model?.Name" required />
+                        <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
 
                     <div class="mb-4 position-relative">
-                        <label for="LastName" class="form-label">Last Name</label>
-                        <i class="fas fa-user input-icon"></i>
-                        <input type="text" class="form-control" id="LastName" name="LastName" value="@Model?.LastName" required />
-                        <span asp-validation-for="LastName" class="text-danger"></span>
+                        <label for="Price" class="form-label">Price</label>
+                        <i class="fas fa-dollar-sign input-icon"></i>
+                        <input type="number" class="form-control" id="Price" name="Price"
+                               value="@Model?.Price" step="0.01" min="0" required />
+                        <span asp-validation-for="Price" class="text-danger"></span>
                     </div>
 
                     <div class="mb-4 position-relative">
-                        <label for="Email" class="form-label">Email</label>
-                        <i class="fas fa-envelope input-icon"></i>
-                        <input type="email" class="form-control" id="Email" name="Email" value="@Model?.Email" required />
-                        <span asp-validation-for="Email" class="text-danger"></span>
+                        <label for="Description" class="form-label">Description</label>
+                        <i class="fas fa-info-circle input-icon"></i>
+                        <textarea class="form-control" id="Description" name="Description" rows="3"
+                                  required>@Model?.Description</textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
 
                     <div class="mb-4 position-relative">
-                        <label for="Phone" class="form-label">Phone</label>
-                        <i class="fas fa-phone input-icon"></i>
-                        <input type="tel" class="form-control" id="Phone" name="Phone" value="@Model?.Phone" required />
-                        <span asp-validation-for="Phone" class="text-danger"></span>
+                        <label for="Category" class="form-label">Category</label>
+                        <i class="fas fa-list input-icon"></i>
+                        <input type="text" class="form-control" id="Category" name="Category"
+                               value="@Model?.Category" required />
+                        <span asp-validation-for="Category" class="text-danger"></span>
                     </div>
 
                     <div class="mb-4 position-relative">
-                        <label for="Age" class="form-label">Age</label>
-                        <i class="fas fa-calendar-alt input-icon"></i>
-                        <input type="number" class="form-control" id="Age" name="Age" value="@Model?.Age" min="0" required />
-                        <span asp-validation-for="Age" class="text-danger"></span>
+                        <label for="Quantity" class="form-label">Quantity</label>
+                        <i class="fas fa-boxes input-icon"></i>
+                        <input type="number" class="form-control" id="Quantity" name="Quantity"
+                               value="@Model?.Quantity" min="0" required />
+                        <span asp-validation-for="Quantity" class="text-danger"></span>
                     </div>
 
                     <div class="d-flex justify-content-end gap-2">
@@ -86,7 +91,7 @@
                             <i class="fas fa-arrow-left me-2"></i>Back to List
                         </a>
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save me-2"></i>Create Customer
+                            <i class="fas fa-save me-2"></i>Create Good
                         </button>
                     </div>
                 </form>

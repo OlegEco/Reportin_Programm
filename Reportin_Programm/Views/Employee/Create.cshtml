@@ -7,39 +7,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create Employee</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-</head>
-<body>
-    <div class="container mt-5">
-        <h1>Create New Employee</h1>
-        <form asp-action="Create" method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .card {
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
 
-            <div class="form-group">
-                <label for="Username">Username</label>
-                <input type="text" class="form-control" id="Username" name="Username" value="@Model?.Username" />
-                <span asp-validation-for="Username" class="text-danger"></span>
+        .card-header {
+            background: linear-gradient(45deg, #4e73df, #224abe);
+            color: white;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+
+        .form-control {
+            padding-left: 40px;
+            border-radius: 20px;
+        }
+
+        .form-label {
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-4">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold">Create New Employee</h6>
             </div>
-            <div class="form-group">
-                <label for="Password">Password</label>
-                <input type="password" class="form-control" id="Password" name="Password" value="@Model?.Password" />
-                <span asp-validation-for="Password" class="text-danger"></span>
+            <div class="card-body">
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <div class="mb-4 position-relative">
+                        <label for="Username" class="form-label">Username</label>
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" class="form-control" id="Username" name="Username"
+                               value="@Model?.Username" required />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4 position-relative">
+                        <label for="Password" class="form-label">Password</label>
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" class="form-control" id="Password" name="Password" required />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4 position-relative">
+                        <label for="Email" class="form-label">Email</label>
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" class="form-control" id="Email" name="Email"
+                               value="@Model?.Email" required />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4 position-relative">
+                        <label for="Phone" class="form-label">Phone</label>
+                        <i class="fas fa-phone input-icon"></i>
+                        <input type="tel" class="form-control" id="Phone" name="Phone"
+                               value="@Model?.Phone" required />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to List
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Create Employee
+                        </button>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="Email">Email</label>
-                <input type="email" class="form-control" id="Email" name="Email" value="@Model?.Email" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label for="Phone">Phone</label>
-                <input type="tel" class="form-control" id="Phone" name="Phone" value="@Model?.Phone" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
-            <button type="submit" class="btn btn-primary">Create</button>
-        </form>
+        </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 </body>
 </html>

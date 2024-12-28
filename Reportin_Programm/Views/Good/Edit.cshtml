@@ -1,11 +1,11 @@
-﻿@model Reportin_Programm.Models.Warehouse
+﻿@model Reportin_Programm.Models.Good
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Edit Warehouse</title>
+    <title>Edit Good</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -40,9 +40,7 @@
     <div class="container py-4">
         <div class="card shadow">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold">
-                    <i class="fas fa-warehouse me-2"></i>Edit Warehouse
-                </h6>
+                <h6 class="m-0 font-weight-bold">Edit Good</h6>
             </div>
             <div class="card-body">
                 <form asp-action="Edit" method="post">
@@ -50,7 +48,7 @@
                     <input type="hidden" asp-for="Id" />
 
                     <div class="mb-4 position-relative">
-                        <label for="Name" class="form-label">Warehouse Name</label>
+                        <label for="Name" class="form-label">Name</label>
                         <i class="fas fa-tag input-icon"></i>
                         <input type="text" class="form-control" id="Name" name="Name"
                                value="@Model.Name" required />
@@ -58,23 +56,36 @@
                     </div>
 
                     <div class="mb-4 position-relative">
-                        <label for="Address" class="form-label">Address</label>
-                        <i class="fas fa-map-marker-alt input-icon"></i>
-                        <input type="text" class="form-control" id="Address" name="Address"
-                               value="@Model.Address" required />
-                        <span asp-validation-for="Address" class="text-danger"></span>
+                        <label for="Price" class="form-label">Price</label>
+                        <i class="fas fa-dollar-sign input-icon"></i>
+                        <input type="number" step="0.01" class="form-control" id="Price" name="Price"
+                               value="@Model.Price" required />
+                        <span asp-validation-for="Price" class="text-danger"></span>
                     </div>
 
-                    @* Можно добавить дополнительные поля в модели Warehouse *@
-                    @* Например:
                     <div class="mb-4 position-relative">
-                        <label for="Capacity" class="form-label">Warehouse Capacity</label>
-                        <i class="fas fa-ruler input-icon"></i>
-                        <input type="number" class="form-control" id="Capacity" name="Capacity"
-                               value="@Model.Capacity" required />
-                        <span asp-validation-for="Capacity" class="text-danger"></span>
+                        <label for="Description" class="form-label">Description</label>
+                        <i class="fas fa-info-circle input-icon"></i>
+                        <textarea class="form-control" id="Description" name="Description"
+                                  required>@Model.Description</textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
-                    *@
+
+                    <div class="mb-4 position-relative">
+                        <label for="Category" class="form-label">Category</label>
+                        <i class="fas fa-list input-icon"></i>
+                        <input type="text" class="form-control" id="Category" name="Category"
+                               value="@Model.Category" required />
+                        <span asp-validation-for="Category" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4 position-relative">
+                        <label for="Quantity" class="form-label">Quantity</label>
+                        <i class="fas fa-boxes input-icon"></i>
+                        <input type="number" class="form-control" id="Quantity" name="Quantity"
+                               value="@Model.Quantity" required />
+                        <span asp-validation-for="Quantity" class="text-danger"></span>
+                    </div>
 
                     <div class="d-flex justify-content-end gap-2">
                         <a asp-action="Index" class="btn btn-secondary">

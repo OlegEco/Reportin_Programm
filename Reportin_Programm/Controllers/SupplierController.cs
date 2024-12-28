@@ -17,7 +17,7 @@ namespace Reportin_Programm.Controllers
         public async Task<IActionResult> Index()
         {
             var suppliers = await _context.Suppliers.ToListAsync();
-            return View();
+            return View(suppliers);
         }
 
         // GET: SupplierController/Details/5
@@ -44,14 +44,16 @@ namespace Reportin_Programm.Controllers
 
         // POST: SupplierController/Create
         [HttpPost]
-        public ActionResult Create(Supplier supplier)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Supplier supplier)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     supplier.Id = Guid.NewGuid();
-                    _context.SaveChangesAsync();
+                    _context.Suppliers.Add(supplier);
+                    await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
                 return View(supplier);
@@ -125,6 +127,7 @@ namespace Reportin_Programm.Controllers
 
         // POST: SupplierController/Delete/5
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
@@ -133,7 +136,7 @@ namespace Reportin_Programm.Controllers
 
                 if (supplier != null)
                 {
-                    _context.Remove(id);
+                    _context.Suppliers.Remove(supplier);
                     await _context.SaveChangesAsync();
                 }
                 return RedirectToAction(nameof(Index));

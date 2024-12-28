@@ -34,6 +34,7 @@ namespace Reportin_Programm.Controllers
         }
 
         // GET: Customer/Create
+        [HttpGet]
         public IActionResult Create()
         {
             var customer = new Customer();
@@ -121,7 +122,6 @@ namespace Reportin_Programm.Controllers
             var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == id);
             if (customer == null)
                 return NotFound();
-
             return View(customer);
         }
 
@@ -139,7 +139,6 @@ namespace Reportin_Programm.Controllers
                     _context.Customers.Remove(customer);
                     await _context.SaveChangesAsync();
                 }
-
                 return RedirectToAction(nameof(Index));
             }
             catch

@@ -17,7 +17,7 @@ namespace Reportin_Programm.Controllers
         public async Task<IActionResult> Index()
         {
             var warehouses = await _context.Warehouses.ToListAsync();
-            return View();
+            return View(warehouses);
         }
 
         // GET: WarehouseController/Details/5
@@ -51,7 +51,7 @@ namespace Reportin_Programm.Controllers
                 if (ModelState.IsValid)
                 {
                     warehouse.Id = Guid.NewGuid();
-                    _context.Add(warehouse);
+                    _context.Warehouses.Add(warehouse);
                     await _context.SaveChangesAsync();
                     
                     return RedirectToAction(nameof(Index));
@@ -145,7 +145,6 @@ namespace Reportin_Programm.Controllers
                 return View();
             }
         }
-
         private bool WarehouseExist(Guid id) =>
              _context.Warehouses.Any(cont => cont.Id == id);
 

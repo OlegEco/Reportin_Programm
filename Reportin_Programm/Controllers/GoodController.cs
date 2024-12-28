@@ -12,11 +12,12 @@ namespace Reportin_Programm.Controllers
         {
             _context = context;
         }
+
         // GET: GoodController
         public async Task<IActionResult> Index()
         {
             var goods = await _context.Goods.ToListAsync();
-            return View();
+            return View(goods);
         }
 
         // GET: GoodController/Details/5
@@ -96,6 +97,7 @@ namespace Reportin_Programm.Controllers
                 {
                     _context.Update(good);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException dbEx)
                 {
@@ -105,9 +107,9 @@ namespace Reportin_Programm.Controllers
                         throw new ArgumentException(dbEx.Message);
                 }
             }
-            return RedirectToAction(nameof(Index));
+            else
+                return View(good);
         }
-
 
         // GET: GoodController/Delete/5
         [HttpGet]

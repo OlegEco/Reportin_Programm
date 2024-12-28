@@ -1,11 +1,11 @@
-﻿@model IEnumerable<Reportin_Programm.Models.Warehouse>
+﻿@model IEnumerable<Reportin_Programm.Models.Good>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Warehouses Management</title>
+    <title>Goods Management</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -44,11 +44,11 @@
             line-height: 1.42857;
         }
 
-        .warehouse-stats {
+        .goods-stats {
             transition: transform 0.2s;
         }
 
-            .warehouse-stats:hover {
+            .goods-stats:hover {
                 transform: translateY(-5px);
             }
 
@@ -62,26 +62,26 @@
     <div class="container-fluid py-4">
         <!-- Header Section -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Warehouses Management</h1>
+            <h1 class="h3 mb-0 text-gray-800">Goods Management</h1>
             <a asp-action="Create" class="d-none d-sm-inline-block btn btn-primary shadow-sm">
-                <i class="fas fa-plus fa-sm text-white-50 me-2"></i>Add New Warehouse
+                <i class="fas fa-plus fa-sm text-white-50 me-2"></i>Add New Good
             </a>
         </div>
 
         <!-- Stats Cards Row -->
         <div class="row mb-4">
             <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-primary shadow h-100 py-2 warehouse-stats">
+                <div class="card border-left-primary shadow h-100 py-2 goods-stats">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    Total Warehouses
+                                    Total Goods
                                 </div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count()</div>
                             </div>
                             <div class="col-auto">
-                                <i class="fas fa-warehouse fa-2x text-gray-300"></i>
+                                <i class="fas fa-boxes fa-2x text-gray-300"></i>
                             </div>
                         </div>
                     </div>
@@ -89,19 +89,19 @@
             </div>
 
             <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-success shadow h-100 py-2 warehouse-stats">
+                <div class="card border-left-success shadow h-100 py-2 goods-stats">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    Unique Locations
+                                    Categories
                                 </div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                    @Model.Select(w => w.Address).Distinct().Count()
+                                    @Model.Select(g => g.Category).Distinct().Count()
                                 </div>
                             </div>
                             <div class="col-auto">
-                                <i class="fas fa-map-marker-alt fa-2x text-gray-300"></i>
+                                <i class="fas fa-list-alt fa-2x text-gray-300"></i>
                             </div>
                         </div>
                     </div>
@@ -112,9 +112,9 @@
         <!-- Main Content Card -->
         <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold">Warehouses List</h6>
+                <h6 class="m-0 font-weight-bold">Goods List</h6>
                 <div class="input-group w-25">
-                    <input type="text" class="form-control search-box" placeholder="Search warehouses...">
+                    <input type="text" class="form-control search-box" placeholder="Search goods...">
                 </div>
             </div>
             <div class="card-body">
@@ -123,35 +123,47 @@
                         <thead class="table-light">
                             <tr>
                                 <th>Name</th>
-                                <th>Address</th>
+                                <th>Price</th>
+                                <th>Description</th>
+                                <th>Category</th>
+                                <th>Quantity</th>
                                 <th class="action-column text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var warehouse in Model)
+                            @foreach (var good in Model)
                             {
                                 <tr>
-                                    <td title="@warehouse.Name">
+                                    <td title="@good.Name">
                                         <div class="d-flex align-items-center">
                                             <div class="rounded-circle bg-light p-2 me-2">
-                                                <i class="fas fa-warehouse text-primary"></i>
+                                                <i class="fas fa-tag text-primary"></i>
                                             </div>
-                                            @warehouse.Name
+                                            @good.Name
                                         </div>
                                     </td>
-                                    <td title="@warehouse.Address">
-                                        <i class="fas fa-map-marker-alt text-danger me-2"></i>@warehouse.Address
+                                    <td title="@good.Price">
+                                        <i class="fas fa-dollar-sign text-success me-2"></i>@good.Price
+                                    </td>
+                                    <td title="@good.Description">
+                                        <i class="fas fa-info-circle text-info me-2"></i>@good.Description
+                                    </td>
+                                    <td title="@good.Category">
+                                        <i class="fas fa-list text-warning me-2"></i>@good.Category
+                                    </td>
+                                    <td title="@good.Quantity">
+                                        <i class="fas fa-boxes text-danger me-2"></i>@good.Quantity
                                     </td>
                                     <td class="text-center">
-                                        <a asp-action="Details" asp-route-id="@warehouse.Id"
+                                        <a asp-action="Details" asp-route-id="@good.Id"
                                            class="btn btn-info btn-circle" title="Details">
                                             <i class="fas fa-info-circle"></i>
                                         </a>
-                                        <a asp-action="Edit" asp-route-id="@warehouse.Id"
+                                        <a asp-action="Edit" asp-route-id="@good.Id"
                                            class="btn btn-warning btn-circle mx-1" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a asp-action="Delete" asp-route-id="@warehouse.Id"
+                                        <a asp-action="Delete" asp-route-id="@good.Id"
                                            class="btn btn-danger btn-circle" title="Delete">
                                             <i class="fas fa-trash"></i>
                                         </a>
