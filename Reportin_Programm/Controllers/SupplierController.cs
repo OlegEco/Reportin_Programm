@@ -17,7 +17,7 @@ namespace Reportin_Programm.Controllers
         public async Task<IActionResult> Index()
         {
             var suppliers = await _context.Suppliers.ToListAsync();
-            return View();
+            return View(suppliers);
         }
 
         // GET: SupplierController/Details/5

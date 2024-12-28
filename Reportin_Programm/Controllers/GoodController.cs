@@ -16,7 +16,7 @@ namespace Reportin_Programm.Controllers
         public async Task<IActionResult> Index()
         {
             var goods = await _context.Goods.ToListAsync();
-            return View();
+            return View(goods);
         }
 
         // GET: GoodController/Details/5

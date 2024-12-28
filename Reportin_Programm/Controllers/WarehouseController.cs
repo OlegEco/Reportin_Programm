@@ -17,7 +17,7 @@ namespace Reportin_Programm.Controllers
         public async Task<IActionResult> Index()
         {
             var warehouses = await _context.Warehouses.ToListAsync();
-            return View();
+            return View(warehouses);
         }
 
         // GET: WarehouseController/Details/5
