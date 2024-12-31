@@ -6,17 +6,17 @@ namespace Reportin_Programm.Controllers
 {
     public class CustomerController : Controller
     {
-        private readonly EfCoreDbContext _context;
+        private readonly IGenericRepository<Customer> _repositoryCustomer;
 
-        public CustomerController(EfCoreDbContext context)
+        public CustomerController(IGenericRepository<Customer> repositoryCustomer)
         {
-            _context = context;
+            _repositoryCustomer = repositoryCustomer;
         }
 
         // GET: Customer
         public async Task<IActionResult> Index()
         {
-            var customers = await _context.Customers.ToListAsync();
+            var customers = await _repositoryCustomer.GetAll();
             return View(customers);
         }
 
@@ -26,19 +26,22 @@ namespace Reportin_Programm.Controllers
             if (id == null)
                 return NotFound();
 
-            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == id);
-            if (customer == null)
+            try
+            {
+                var customer = await _repositoryCustomer.GetById(id.Value);
+                return View(customer);
+            }
+            catch (KeyNotFoundException)
+            {
                 return NotFound();
-
-            return View(customer);
+            }
         }
 
         // GET: Customer/Create
         [HttpGet]
         public IActionResult Create()
         {
-            var customer = new Customer();
-            return View(customer);
+            return View(new Customer());
         }
 
         // POST: Customer/Create
@@ -46,67 +49,47 @@ namespace Reportin_Programm.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Customer customer)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    customer.Id = Guid.NewGuid();
-                    _context.Add(customer);
-                    await _context.SaveChangesAsync();
-
-                    return RedirectToAction(nameof(Index));
-                }
-                return View(customer);
+                await _repositoryCustomer.Add(customer);
+                return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(customer);
         }
 
         // GET: Customer/Edit/5
         [HttpGet]
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Update(Guid? id)
         {
             try
             {
                 if (id == null)
                     return NotFound();
 
-                var customer = await _context.Customers.FindAsync(id);
-                if (customer == null)
-                    return NotFound();
-
+                var customer = await _repositoryCustomer.GetById(id.Value);
                 return View(customer);
             }
-            catch
+            catch (KeyNotFoundException)
             {
-                return View();
+                return NotFound();
             }
         }
 
         // POST: Customer/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, Customer customer)
+        public async Task<IActionResult> Update(Guid id, Customer customer)
         {
             if (id != customer.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(customer);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CustomerExists(customer.Id))
-                        return NotFound();
-                    else
-                        throw;
-                }
+
+                var updated = await _repositoryCustomer.Update(customer);
+                if (!updated)
+                    return NotFound();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(customer);
@@ -119,10 +102,15 @@ namespace Reportin_Programm.Controllers
             if (id == null)
                 return NotFound();
 
-            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == id);
-            if (customer == null)
+            try
+            {
+                var customer = _repositoryCustomer.GetById(id.Value);
+                return View(customer);
+            }
+            catch (KeyNotFoundException)
+            {
                 return NotFound();
-            return View(customer);
+            }
         }
 
         // POST: Customer/Delete/5
@@ -132,13 +120,7 @@ namespace Reportin_Programm.Controllers
         {
             try
             {
-                var customer = await _context.Customers.FindAsync(id);
-
-                if (customer != null)
-                {
-                    _context.Customers.Remove(customer);
-                    await _context.SaveChangesAsync();
-                }
+                await _repositoryCustomer.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -146,13 +128,5 @@ namespace Reportin_Programm.Controllers
                 return View();
             }
         }
-
-        private bool CustomerExists(Guid id)
-        {
-            return _context.Customers.Any(c => c.Id == id);
-        }
-
-        private bool CustomerExist(Guid id) =>
-             _context.Customers.Any(ci => ci.Id == id);
     }
 }

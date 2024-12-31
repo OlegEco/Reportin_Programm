@@ -6,17 +6,16 @@ namespace Reportin_Programm.Controllers
 {
     public class GoodController : Controller
     {
-        private readonly EfCoreDbContext _context;
-
-        public GoodController(EfCoreDbContext context)
+        private readonly IGenericRepository<Good> _repositoryGood;
+        public GoodController(IGenericRepository<Good> repositoryGood)
         {
-            _context = context;
+            _repositoryGood = repositoryGood;
         }
 
         // GET: GoodController
         public async Task<IActionResult> Index()
         {
-            var goods = await _context.Goods.ToListAsync();
+            var goods = await _repositoryGood.GetAll();
             return View(goods);
         }
 
@@ -27,7 +26,7 @@ namespace Reportin_Programm.Controllers
             if (id == null)
                 return NotFound();
 
-            var goods = await _context.Goods.FirstOrDefaultAsync(gi => gi.Id == id);
+            var goods = await _repositoryGood.GetById(id.Value);
             if (goods == null)
                 return NotFound();
 
@@ -37,8 +36,7 @@ namespace Reportin_Programm.Controllers
         // GET: GoodController/Create
         public IActionResult Create()
         {
-            var good = new Good();
-            return View(good);
+            return View(new Good());
         }
 
         // POST: GoodController/Create
@@ -49,10 +47,7 @@ namespace Reportin_Programm.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    good.Id = Guid.NewGuid();
-                    _context.Add(good);
-                    await _context.SaveChangesAsync();
-
+                    await _repositoryGood.Add(good);
                     return RedirectToAction(nameof(Index));
                 }
                 return View(good);
@@ -64,51 +59,34 @@ namespace Reportin_Programm.Controllers
         }
 
         // GET: GoodController/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Update(Guid? id)
         {
-            try
-            {
-                if (id == null)
-                    return NotFound();
+            if (id == null)
+                return NotFound();
 
-                var good = await _context.Goods.FindAsync(id);
-                if (good == null)
-                    return NotFound();
+            var good = await _repositoryGood.GetById(id.Value);
+            if (good == null)
+                return NotFound();
 
-                return View(good);
-            }
-            catch //TODO Need added to Serilog all catch Exception
-            {
-                return View();
-            }
-
+            return View(good);
         }
 
         // POST: GoodController/Edit/5
         [HttpPost]
-        public async Task<IActionResult> Edit(Guid id, Good good)
+        public async Task<IActionResult> Update(Guid id, Good good)
         {
             if (id != good.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(good);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (DbUpdateConcurrencyException dbEx)
-                {
-                    if (!GoodExist(good.Id))
-                        return NotFound();
-                    else
-                        throw new ArgumentException(dbEx.Message);
-                }
+                var updated = await _repositoryGood.Update(good);
+                if (!updated)
+                    return NotFound();
+
+                return RedirectToAction(nameof(Index));
             }
-            else
-                return View(good);
+            return View(good);
         }
 
         // GET: GoodController/Delete/5
@@ -118,7 +96,7 @@ namespace Reportin_Programm.Controllers
             if (id == null)
                 return NotFound();
 
-            var goods = await _context.Goods.FirstOrDefaultAsync(gi => gi.Id == id);
+            var goods = await _repositoryGood.GetById(id.Value);
             if (goods == null)
                 return NotFound();
 
@@ -132,25 +110,13 @@ namespace Reportin_Programm.Controllers
         {
             try
             {
-                var good = await _context.Goods.FindAsync(id);
-
-                if (good != null)
-                {
-                    _context.Remove(good);
-                    await _context.SaveChangesAsync();
-                }
-
+                var good = await _repositoryGood.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (KeyNotFoundException)
             {
-                return View();
+                return NotFound();
             }
-        }
-
-        private bool GoodExist(Guid id)
-        {
-            return _context.Goods.Any(gi => gi.Id == id);
         }
     }
 }

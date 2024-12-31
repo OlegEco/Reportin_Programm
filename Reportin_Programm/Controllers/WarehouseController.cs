@@ -6,17 +6,17 @@ namespace Reportin_Programm.Controllers
 {
     public class WarehouseController : Controller
     {
-        private readonly EfCoreDbContext _context;
+        private readonly IGenericRepository<Warehouse> _repositoryWarehouse;
 
-        public WarehouseController(EfCoreDbContext context)
+        public WarehouseController(IGenericRepository<Warehouse> repositoryWarehouse)
         {
-            _context = context;
+            _repositoryWarehouse = repositoryWarehouse;
         }
 
         // GET: WarehouseController
         public async Task<IActionResult> Index()
         {
-            var warehouses = await _context.Warehouses.ToListAsync();
+            var warehouses = await _repositoryWarehouse.GetAll();/*_context.Warehouses.ToListAsync();*/
             return View(warehouses);
         }
 
@@ -26,7 +26,7 @@ namespace Reportin_Programm.Controllers
             if (id == null)
                 return NotFound();
 
-            var warehouses = await _context.Warehouses.FirstOrDefaultAsync(n => n.Id == id);
+            var warehouses = await _repositoryWarehouse.GetById(id.Value);/*_context.Warehouses.FirstOrDefaultAsync(n => n.Id == id);*/
             if (warehouses == null)
                 return NotFound();
 
@@ -37,8 +37,8 @@ namespace Reportin_Programm.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var warehouse = new Warehouse();
-            return View(warehouse);
+            //var warehouse = new Warehouse();
+            return View(new Warehouse());
         }
 
         // POST: WarehouseController/Create
@@ -50,10 +50,10 @@ namespace Reportin_Programm.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    warehouse.Id = Guid.NewGuid();
-                    _context.Warehouses.Add(warehouse);
-                    await _context.SaveChangesAsync();
-                    
+                    //warehouse.Id = Guid.NewGuid();
+                    //_context.Warehouses.Add(warehouse);
+                    //await _context.SaveChangesAsync();
+                    await _repositoryWarehouse.Add(warehouse);
                     return RedirectToAction(nameof(Index));
                 }
                 return View(warehouse);
@@ -65,50 +65,39 @@ namespace Reportin_Programm.Controllers
         }
 
         // GET: WarehouseController/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Update(Guid? id)
         {
-            try
-            {
-                if (id == null)
-                    return NotFound();
+            if (id == null)
+                return NotFound();
 
-                var warehouse = await _context.Warehouses.FindAsync(id);
-                if (warehouse == null)
-                    return NotFound();
+            //var warehouse = await _context.Warehouses.FindAsync(id);
+            var warehouse = await _repositoryWarehouse.GetById(id.Value);
+            if (warehouse == null)
+                return NotFound();
 
-                return View(warehouse);
-            }
-            catch
-            {
-                return View();
-            }
+            return View(warehouse);
         }
 
         // POST: WarehouseController/Edit/5
         [HttpPost]
-        public async Task<IActionResult> Edit(Guid id, Warehouse warehouse)
+        public async Task<IActionResult> Update(Guid id, Warehouse warehouse)
         {
             if (id != warehouse.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(warehouse);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!WarehouseExist(warehouse.Id))
-                        return NotFound();
-                    else
-                        throw;
-                }
-            }
-            return RedirectToAction(nameof(Index));
-        }
 
+                //_context.Update(warehouse);
+                //await _context.SaveChangesAsync();
+                var updated = await _repositoryWarehouse.Update(warehouse);
+                if (!updated)
+                    return NotFound();
+
+                return RedirectToAction(nameof(Index));
+            }
+            return View(warehouse);
+        }
 
         // GET: WarehouseController/Delete/5
         [HttpGet]
@@ -117,8 +106,7 @@ namespace Reportin_Programm.Controllers
             if (id == null)
                 return NotFound();
 
-            var warehouse = await _context.Warehouses.FirstOrDefaultAsync(wi => wi.Id == id);
-
+            var warehouse = await _repositoryWarehouse.GetById(id.Value); /*_context.Warehouses.FirstOrDefaultAsync(wi => wi.Id == id);*/
             if (warehouse == null)
                 return NotFound();
 
@@ -131,22 +119,23 @@ namespace Reportin_Programm.Controllers
         {
             try
             {
-                var warehouse = await _context.Warehouses.FindAsync(id);
+                //var warehouse = await _context.Warehouses.FindAsync(id);
 
-                if (warehouse != null)
-                {
-                    _context.Warehouses.Remove(warehouse);
-                    await _context.SaveChangesAsync();
-                }
+                //if (warehouse != null)
+                //{
+                //    _context.Warehouses.Remove(warehouse);
+                //    await _context.SaveChangesAsync();
+                //}
+                //return RedirectToAction(nameof(Index));
+
+                var warehouse = await _repositoryWarehouse.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+
+            catch (KeyNotFoundException)
             {
-                return View();
+                return NotFound();
             }
         }
-        private bool WarehouseExist(Guid id) =>
-             _context.Warehouses.Any(cont => cont.Id == id);
-
     }
 }

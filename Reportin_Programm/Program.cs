@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddDbContext<EfCoreDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("OurDb")));
 

@@ -49,7 +49,7 @@ namespace Reportin_Programm.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Update(Guid? id)
         {
             if (id == null)
                 return NotFound();
@@ -62,7 +62,7 @@ namespace Reportin_Programm.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Username,Password,Email,Phone")] Employee employee)
+        public async Task<IActionResult> Update(Guid id, [Bind("Id,Username,Password,Email,Phone")] Employee employee)
         {
             if (id != employee.Id)
                 return NotFound();

@@ -6,17 +6,17 @@ namespace Reportin_Programm.Controllers
 {
     public class SupplierController : Controller
     {
-        private readonly EfCoreDbContext _context;
-
-        public SupplierController(EfCoreDbContext context)
+        private readonly IGenericRepository<Supplier> _repositorySupplier;
+        public SupplierController(IGenericRepository<Supplier> repositorySupplier)
         {
-            _context = context;
+            _repositorySupplier = repositorySupplier;
         }
 
         // GET: SupplierController
         public async Task<IActionResult> Index()
         {
-            var suppliers = await _context.Suppliers.ToListAsync();
+            //var suppliers = await _context.Suppliers.ToListAsync();
+            var suppliers = await _repositorySupplier.GetAll();
             return View(suppliers);
         }
 
@@ -27,7 +27,8 @@ namespace Reportin_Programm.Controllers
             if (id == null)
                 return NotFound();
 
-            var suppliers = await _context.Suppliers.FirstOrDefaultAsync(si => si.Id == id);
+            //var suppliers = await _context.Suppliers.FirstOrDefaultAsync(si => si.Id == id);
+            var suppliers = await _repositorySupplier.GetById(id.Value);
             if (suppliers == null)
                 return NotFound();
 
@@ -38,8 +39,7 @@ namespace Reportin_Programm.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var supplier = new Supplier();
-            return View(supplier);
+            return View(new Supplier());
         }
 
         // POST: SupplierController/Create
@@ -47,65 +47,52 @@ namespace Reportin_Programm.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Supplier supplier)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    supplier.Id = Guid.NewGuid();
-                    _context.Suppliers.Add(supplier);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                return View(supplier);
+                //supplier.Id = Guid.NewGuid();
+                //_context.Suppliers.Add(supplier);
+                //await _context.SaveChangesAsync();
+                await _repositorySupplier.Add(supplier);
+                return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(supplier);
         }
 
         // GET: SupplierController/Edit/5
         [HttpGet]
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Update(Guid? id)
         {
             try
             {
                 if (id == null)
                     return NotFound();
 
-                var suppliers = await _context.Suppliers.FindAsync(id);
+                //var suppliers = await _context.Suppliers.FindAsync(id);
+                var suppliers = await _repositorySupplier.GetById(id.Value);
                 if (suppliers == null)
                     return NotFound();
 
                 return View(suppliers);
             }
-            catch (Exception)
+            catch (KeyNotFoundException)
             {
-                return View();
+                return NotFound();
             }
         }
 
         // POST: SupplierController/Edit/5
         [HttpPost]
-        public async Task<IActionResult> Edit(Guid id, Supplier supplier)
+        public async Task<IActionResult> Update(Guid id, Supplier supplier)
         {
             if (id != supplier.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(supplier);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException dbEx)
-                {
-                    if (!SupplierExist(supplier.Id))
-                        return NotFound();
-                    else
-                        throw new ArgumentException(dbEx.Message);
-                }
+                var updated = await _repositorySupplier.Update(supplier);
+                if (!updated)
+                    return NotFound();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(supplier);
@@ -118,11 +105,15 @@ namespace Reportin_Programm.Controllers
             if (id == null)
                 return NotFound();
 
-            var suppliers = await _context.Suppliers.FirstOrDefaultAsync(si => si.Id == id);
-            if (suppliers == null)
+            try
+            {
+                var supplier = await _repositorySupplier.GetById(id.Value);
+                return View(supplier);
+            }
+            catch (KeyNotFoundException)
+            {
                 return NotFound();
-
-            return View(suppliers);
+            }
         }
 
         // POST: SupplierController/Delete/5
@@ -132,13 +123,7 @@ namespace Reportin_Programm.Controllers
         {
             try
             {
-                var supplier = await _context.Suppliers.FindAsync(id);
-
-                if (supplier != null)
-                {
-                    _context.Suppliers.Remove(supplier);
-                    await _context.SaveChangesAsync();
-                }
+                var supplier = await _repositorySupplier.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -146,8 +131,5 @@ namespace Reportin_Programm.Controllers
                 return View();
             }
         }
-
-        private bool SupplierExist(Guid id) =>
-            _context.Suppliers.Any(si => si.Id == id);
     }
 }
