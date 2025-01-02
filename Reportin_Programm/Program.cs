@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Reportin_Programm;
+using Reportin_Programm.Services.SMTPService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddDbContext<EfCoreDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("OurDb")));
 

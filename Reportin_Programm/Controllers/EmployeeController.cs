@@ -1,15 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Reportin_Programm.Models;
+using Reportin_Programm.Services.DTOs;
+using Reportin_Programm.Services.SMTPService;
 
 namespace Reportin_Programm.Controllers
 {
     public class EmployeeController : Controller
     {
         private readonly IGenericRepository<Employee> _repositoryEmployee;
+        private readonly IEmailService _emailService;
 
-        public EmployeeController(IGenericRepository<Employee> repositoryEmployee)
+        public EmployeeController(IGenericRepository<Employee> repositoryEmployee, IEmailService emailService)
         {
             _repositoryEmployee = repositoryEmployee;
+            _emailService = emailService;
         }
 
         public async Task<IActionResult> Index()
@@ -105,17 +109,28 @@ namespace Reportin_Programm.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult SignUp() => View();
+
         [HttpPost]
         public async Task<IActionResult> SignUp(Employee employee)
         {
             if (ModelState.IsValid)
             {
                 await _repositoryEmployee.Add(employee);
+
+                var email = new EmailDTO()
+                {
+                    To = employee.Email,
+                    Subject = "Welcome to the Reportin_Program",
+                    Body = $"Dear {employee.Username}, <br><br>WElcome to our Software"
+                };
                 return RedirectToAction(nameof(SignIn));
             }
             return View(employee);
         }
 
+        [HttpGet]
         public IActionResult SignIn() => View();
 
         [HttpPost]
