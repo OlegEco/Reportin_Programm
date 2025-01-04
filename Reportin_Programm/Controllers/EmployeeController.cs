@@ -121,10 +121,13 @@ namespace Reportin_Programm.Controllers
 
                 var email = new EmailDTO()
                 {
-                    To = employee.Email,
+                    To = $"{employee.Email}",
                     Subject = "Welcome to the Reportin_Program",
                     Body = $"Dear {employee.Username}, <br><br>WElcome to our Software"
                 };
+
+                await _emailService.SendMail(email);
+
                 return RedirectToAction(nameof(SignIn));
             }
             return View(employee);
