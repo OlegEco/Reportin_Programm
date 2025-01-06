@@ -15,16 +15,19 @@ namespace Reportin_Programm.Controllers
 
         public IActionResult Index()
         {
-            if (!User.Identity.IsAuthenticated)
+            var username = HttpContext.Session.GetString("Username");
+            if (string.IsNullOrEmpty(username))
             {
-                return RedirectToAction("SignIn", "Employee"); 
+                return RedirectToAction("SignIn", "Employee");
             }
 
-            var currentUser = _context.Employees
-                .Include(e => e.Customers)
-                .Include(e => e.Suppliers)
-                .Include(e => e.Warehouses)
-                .FirstOrDefault(e => e.Username == User.Identity.Name);
+            //var currentUser = _context.Employees
+            //    .Include(e => e.Customers)
+            //    .Include(e => e.Suppliers)
+            //    .Include(e => e.Warehouses)
+            //    .FirstOrDefault(e => e.Username == username);
+
+            var currentUser = _context.Employees.FirstOrDefault(e => e.Username == username);
 
             // Если текущий пользователь не найден, возвращаем ошибку 404
             if (currentUser == null)
