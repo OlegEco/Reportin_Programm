@@ -1,0 +1,175 @@
+﻿@{
+    ViewData["Title"] = "Privacy Policy";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .card {
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
+
+        .card-header {
+            background: linear-gradient(45deg, #4e73df, #224abe);
+            color: white;
+        }
+
+        .section-title {
+            color: #4e73df;
+            border-bottom: 2px solid #4e73df;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        .privacy-section {
+            margin-bottom: 20px;
+        }
+
+        .text-section {
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .icon-section {
+            color: #4e73df;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container-fluid py-4">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Политика конфиденциальности</h1>
+            <a asp-controller="Home" asp-action="Index" class="d-none d-sm-inline-block btn btn-primary shadow-sm">
+                <i class="fas fa-home fa-sm text-white-50 me-2"></i>Вернуться на главную
+            </a>
+        </div>
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold">Условия использования данных</h6>
+            </div>
+            <div class="card-body">
+                <div class="privacy-section">
+                    <p class="text-section">
+                        Настоящая Политика конфиденциальности (далее – «Политика») регулирует порядок сбора, обработки и использования информации, передаваемой пользователями (далее – «Пользователи») в рамках использования веб-приложения, предоставляемого нами, и определяет ответственность сторон, возникающую в процессе обработки персональных данных в рамках данного соглашения.
+                    </p>
+                </div>
+
+                <div class="privacy-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-info-circle icon-section"></i>1. Определения
+                    </h2>
+                    <p class="text-section">
+                        <strong>1.1.</strong> В целях настоящей Политики термин «персональные данные» применяется в значении, установленном действующим законодательством в области защиты данных.
+                    </p>
+                    <p class="text-section">
+                        <strong>1.2.</strong> Используемые термины «система», «сервис», «приложение» понимаются как функциональные единицы, обеспечивающие выполнение операций, связанных с обработкой данных, предоставленных Пользователем.
+                    </p>
+                </div>
+
+                <div class="privacy-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-database icon-section"></i>2. Обработка данных
+                    </h2>
+                    <p class="text-section">
+                        <strong>2.1.</strong> Обработка данных осуществляется на основании принципов «согласия», «необходимости» и «достаточности», с соблюдением принципа минимизации данных, в соответствии с действующими правовыми актами, регулирующими обработку персональных данных, за исключением случаев, когда обработка исключает возможность идентификации субъекта данных.
+                    </p>
+                    <p class="text-section">
+                        <strong>2.2.</strong> В рамках использования сервисов, Пользователь подтверждает согласие на обработку данных, которое включает, но не ограничивается, сбором, хранением, передаче данных третьим лицам на законных основаниях.
+                    </p>
+                </div>
+
+                <div class="privacy-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-shield-alt icon-section"></i>3. Ответственность
+                    </h2>
+                    <p class="text-section">
+                        <strong>3.1.</strong> Мы не несем ответственности за любые последствия, включая, но не ограничиваясь, потерей данных, ущербом или вредом, связанным с доступом к данным, а также с их использованием в случаях, если это предусмотрено исключениями, указанными в соответствующих правовых нормах.
+                    </p>
+                    <p class="text-section">
+                        <strong>3.2.</strong> Мы не несем ответственности за нарушения третьими лицами условий использования сервиса, в том числе за утрату или незаконное использование данных в случае, когда доступ к данным был получен в нарушение предусмотренных стандартов безопасности.
+                    </p>
+                </div>
+
+                <div class="privacy-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-exchange-alt icon-section"></i>4. Передача данных
+                    </h2>
+                    <p class="text-section">
+                        <strong>4.1.</strong> Мы оставляем за собой право передавать данные Пользователя третьим сторонам, как в пределах, так и за пределами юрисдикции, на основании заключенных соглашений, которые регулируются соответствующими нормами международного права и внутренних нормативных актов.
+                    </p>
+                    <p class="text-section">
+                        <strong>4.2.</strong> Применение любых механизмов защиты данных является рекомендательным, и ответственность за надлежащую защиту данных лежит исключительно на Пользователе.
+                    </p>
+                </div>
+
+                <div class="privacy-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-cogs icon-section"></i>5. Прочее
+                    </h2>
+                    <p class="text-section">
+                        <strong>5.1.</strong> Мы оставляем за собой право изменять настоящую Политику в любой момент, без предварительного уведомления Пользователя, с учетом изменений в законодательных и нормативных актах, регулирующих вопросы защиты данных.
+                    </p>
+                    <p class="text-section">
+                        <strong>5.2.</strong> Все изменения вступают в силу немедленно после их публикации на сайте или в иных формах, предоставленных для ознакомления Пользователем.
+                    </p>
+                    <p class="text-section">
+                        <strong>5.3.</strong> В случае несогласия с условиями настоящей Политики Пользователь обязан немедленно прекратить использование сервиса и удалить все учетные записи.
+                    </p>
+                </div>
+
+                <div class="privacy-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-user-shield icon-section"></i>6. Права Пользователя
+                    </h2>
+                    <p class="text-section">
+                        <strong>6.1.</strong> Пользователь имеет право:
+                        <ul>
+                            <li>Получать информацию о своих персональных данных</li>
+                            <li>Требовать корректировки неточных данных</li>
+                            <li>Запрашивать удаление своих персональных данных</li>
+                            <li>Отзывать согласие на обработку данных</li>
+                        </ul>
+                    </p>
+                    <p class="text-section">
+                        <strong>6.2.</strong> Для реализации своих прав Пользователь может направить официальный запрос через форму обратной связи или на электронную почту support@ourcompany.com
+                    </p>
+                </div>
+
+                <div class="privacy-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-lock icon-section"></i>7. Безопасность данных
+                    </h2>
+                    <p class="text-section">
+                        <strong>7.1.</strong> Мы применяем современные технологические и организационные меры защиты данных, включая:
+                        <ul>
+                            <li>Шифрование персональных данных</li>
+                            <li>Многофакторную аутентификацию</li>
+                            <li>Регулярные проверки безопасности</li>
+                            <li>Контроль доступа к информационным системам</li>
+                        </ul>
+                    </p>
+                    <p class="text-section">
+                        <strong>7.2.</strong> Несмотря на принимаемые меры, абсолютная безопасность данных не может быть гарантирована.
+                    </p>
+                </div>
+
+                <div class="privacy-section text-center mt-4">
+                    <p class="text-muted">
+                        Последнее обновление: @DateTime.Now.ToString("dd MMMM yyyy")
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
