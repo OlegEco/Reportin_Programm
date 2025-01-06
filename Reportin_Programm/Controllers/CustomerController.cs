@@ -7,10 +7,12 @@ namespace Reportin_Programm.Controllers
     public class CustomerController : Controller
     {
         private readonly IGenericRepository<Customer> _repositoryCustomer;
+        private readonly IGenericRepository<Employee> _repositoryEmployee;
 
-        public CustomerController(IGenericRepository<Customer> repositoryCustomer)
+        public CustomerController(IGenericRepository<Customer> repositoryCustomer, IGenericRepository<Employee> repositoryEmployee)
         {
             _repositoryCustomer = repositoryCustomer;
+            _repositoryEmployee = repositoryEmployee;
         }
 
         // GET: Customer
@@ -51,6 +53,14 @@ namespace Reportin_Programm.Controllers
         {
             if (ModelState.IsValid)
             {
+                var username = HttpContext.Session.GetString("Username");
+                var currentEmployee = await _repositoryEmployee.GetByPredicate(ce => ce.Username == username);
+
+                if (currentEmployee == null)
+                    return Unauthorized();
+
+                customer.Employees = currentEmployee;
+
                 await _repositoryCustomer.Add(customer);
                 return RedirectToAction(nameof(Index));
             }

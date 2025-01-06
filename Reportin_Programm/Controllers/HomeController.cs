@@ -21,13 +21,11 @@ namespace Reportin_Programm.Controllers
                 return RedirectToAction("SignIn", "Employee");
             }
 
-            //var currentUser = _context.Employees
-            //    .Include(e => e.Customers)
-            //    .Include(e => e.Suppliers)
-            //    .Include(e => e.Warehouses)
-            //    .FirstOrDefault(e => e.Username == username);
+            var currentUser = _context.Employees
+                .Include(e => e.Customers)
+                .FirstOrDefault(e => e.Username == username);
 
-            var currentUser = _context.Employees.FirstOrDefault(e => e.Username == username);
+            //var currentUser = _context.Employees.FirstOrDefault(e => e.Username == username);
 
             // Если текущий пользователь не найден, возвращаем ошибку 404
             if (currentUser == null)
