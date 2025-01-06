@@ -155,7 +155,7 @@ namespace Reportin_Programm.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(SignIn));
         }
     }
 }
