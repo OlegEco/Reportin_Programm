@@ -1,0 +1,142 @@
+﻿@model Employee
+@{
+    ViewData["Title"] = "Личный кабинет";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Личный кабинет</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .card {
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
+
+        .card-header {
+            background: linear-gradient(45deg, #4e73df, #224abe);
+            color: white;
+        }
+
+        .employee-stats {
+            transition: transform 0.2s;
+        }
+
+            .employee-stats:hover {
+                transform: translateY(-5px);
+            }
+
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container-fluid py-4">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Личный кабинет</h1>
+            <a asp-controller="Employee" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary shadow-sm">
+                <i class="fas fa-user-edit fa-sm text-white-50 me-2"></i>Редактировать профиль
+            </a>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2 employee-stats">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Клиенты
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    @(Model.Customers?.Count ?? 0)
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-users fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2 employee-stats">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Поставщики
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    @(Model.Suppliers?.Count ?? 0)
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-truck fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-info shadow h-100 py-2 employee-stats">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                    Склады
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    @(Model.Warehouses?.Count ?? 0)
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-warehouse fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold">Информация о сотруднике</h6>
+            </div>
+            <div class="card-body text-center">
+                <img src="~/img/undraw_profile.svg" class="profile-avatar mb-3" alt="Профиль">
+                <h4 class="mb-2">@Model.Username</h4>
+                <p class="text-muted mb-3">
+                    <i class="fas fa-envelope me-2"></i>@Model.Email
+                </p>
+                <p class="text-muted">
+                    <i class="fas fa-phone me-2"></i>@Model.Phone
+                </p>
+                <div class="mt-4">
+                    <a asp-controller="Customer" asp-action="Index" class="btn btn-primary me-2">
+                        <i class="fas fa-users me-2"></i>Клиенты
+                    </a>
+                    <a asp-controller="Supplier" asp-action="Index" class="btn btn-success me-2">
+                        <i class="fas fa-truck me-2"></i>Поставщики
+                    </a>
+                    <a asp-controller="Warehouse" asp-action="Index" class="btn btn-info">
+                        <i class="fas fa-warehouse me-2"></i>Склады
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

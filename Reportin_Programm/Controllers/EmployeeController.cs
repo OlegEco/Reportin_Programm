@@ -146,6 +146,15 @@ namespace Reportin_Programm.Controllers
                 return View();
             }
 
+            HttpContext.Session.SetString("Username", employee.Username);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
             return RedirectToAction(nameof(Index));
         }
     }
